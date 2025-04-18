@@ -72,7 +72,6 @@ async fn main() {
             .ui(&mut root_ui(), |ui| {
                 // Algorithm selection
                 ui.tree_node(hash!(), "Algorithms", |ui| {
-                    let previous_algo = algorithm.current_type;
                     ui.label(None, format!("Current algorithm: {}", algorithm.current_type).as_str());
 
                     if ui.button(None, algorithms::Type::BubbleSort.to_string()) {
@@ -89,10 +88,6 @@ async fn main() {
                     ui.same_line(0.0);
                     if ui.button(None, algorithms::Type::RadixSort.to_string()) {
                         algorithm.current_type = algorithms::Type::RadixSort; 
-                    }
-
-                    if algorithm.current_type != previous_algo {
-                        println!("Algorithm change: {} -> {}", previous_algo, algorithm.current_type);
                     }
                 });
 
