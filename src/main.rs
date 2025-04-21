@@ -3,10 +3,16 @@ use algorithms::draw_bars;
 use macroquad::{prelude::*, ui::{hash, root_ui, widgets}};
 
 
+fn generate_values(number: usize) -> Vec<i32> {
+    let values: Vec<i32> = (1..=number).map(|_| rand::gen_range(50i32, 400i32)).collect();
+    values
+}
+
+
 #[macroquad::main("Algorithm Visualizer")]
 async fn main() {
     let mut number_of_bars: f32 = 40.0;
-    let mut values: Vec<i32> = (1..=number_of_bars as u32).map(|_| rand::gen_range(50, 400)).collect();
+    let mut values: Vec<i32> = generate_values(number_of_bars as usize);
     let mut algo_duration: Option<f64> = None; 
     let mut algorithm: algorithms::Algorithm = Default::default();
 
@@ -44,6 +50,10 @@ async fn main() {
                 });
             });
 
+        // Check if new number of bars was set by the user
+        if number_of_bars as usize != values.len() {
+            values = generate_values(number_of_bars as usize);
+        }
         algorithms::draw_bars(&values, usize::MAX, usize::MAX);
 
         // Run button action
@@ -65,7 +75,7 @@ async fn main() {
             .position(vec2(screen_width() - 160.0, 30.0))
             .ui(&mut root_ui())
         {
-            values = (1..=number_of_bars as u32).map(|_| rand::gen_range(50, 400)).collect();
+            values = generate_values(number_of_bars as usize);
             println!("New values: {:?}", values);
         }
 
