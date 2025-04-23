@@ -43,7 +43,9 @@ impl Algorithm {
             Type::QuickSort => {
                 quick_sort(values, 0, values.len() - 1, self.slowdown).await;
             }
-            Type::SelectionSort => todo!(),
+            Type::SelectionSort => {
+                selection_sort(values, self.slowdown).await;
+            },
             Type::InsertionSort => todo!(),
             Type::MergeSort => todo!(),
             Type::HeapSort => todo!(),
@@ -57,7 +59,7 @@ impl Default for Algorithm {
     fn default() -> Self {
         Self {
             current_type: Type::default(),
-            slowdown: 0.05,
+            slowdown: 0.0,
         }
     }
 }
@@ -125,11 +127,29 @@ async fn partition(values: &mut [i32], low: usize, high: usize, slowdown: f32) -
 
 async fn quick_sort(values: &mut [i32], low: usize, high: usize, slowdown: f32) {
     if low < high {
-        let pivot_idx = partition(values, low, high, slowdown).await;
+        let partition_idx = partition(values, low, high, slowdown).await;
 
-        if pivot_idx > 0 {
-            Box::pin(quick_sort(values, low, pivot_idx - 1, slowdown)).await;
+        if partition_idx > 0 {
+            Box::pin(quick_sort(values, low, partition_idx - 1, slowdown)).await;
         }
-        Box::pin(quick_sort(values, pivot_idx + 1, high, slowdown)).await;
+        Box::pin(quick_sort(values, partition_idx + 1, high, slowdown)).await;
+    }
+}
+
+/*
+ * Selection Sort
+ */
+
+async fn selection_sort(values: &mut [i32], slowdown: f32) {
+    for i in 0..values.len() - 1 {
+        let mut min_idx: usize = i;
+
+        for j in i+1..values.len() {
+            if values[j] < values[min_idx] {
+                min_idx = j;
+            }
+        }
+        redraw_and_slowdown(values, i, min_idx, slowdown).await;
+        values.swap(i, min_idx);
     }
 }

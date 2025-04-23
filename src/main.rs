@@ -1,5 +1,4 @@
 mod algorithms;
-use algorithms::draw_bars;
 use macroquad::{prelude::*, ui::{hash, root_ui, widgets}};
 
 
@@ -35,8 +34,8 @@ async fn main() {
                         algorithm.current_type = algorithms::Type::QuickSort; 
                     }
                     ui.same_line(0.0);
-                    if ui.button(None, algorithms::Type::CountingSort.to_string()) {
-                        algorithm.current_type = algorithms::Type::CountingSort; 
+                    if ui.button(None, algorithms::Type::SelectionSort.to_string()) {
+                        algorithm.current_type = algorithms::Type::SelectionSort; 
                     }
                     ui.same_line(0.0);
                     if ui.button(None, algorithms::Type::RadixSort.to_string()) {
